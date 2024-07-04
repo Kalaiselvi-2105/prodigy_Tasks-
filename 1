@@ -1,0 +1,29 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+data = {
+    'Age': [23, 45, 31, 35, 25, 43, 33, 27, 29, 40, 22, 34, 30, 36, 24, 28, 37, 32, 26, 38],
+    'Gender': ['Male', 'Female', 'Female', 'Male', 'Female', 'Male', 'Female', 'Female', 'Male', 'Female',
+               'Male', 'Female', 'Male', 'Female', 'Male', 'Female', 'Male', 'Female', 'Male', 'Female']
+}
+
+df = pd.DataFrame(data)
+
+# Histogram for Age
+plt.figure(figsize=(10, 6))
+plt.hist(df['Age'], bins=10, color='blue', edgecolor='black')
+plt.title('Distribution of Ages')
+plt.xlabel('Age')
+plt.ylabel('Frequency')
+plt.grid(axis='y', alpha=0.75)
+plt.show()
+
+gender_counts = df['Gender'].value_counts()
+
+plt.figure(figsize=(10, 6))
+plt.bar(gender_counts.index, gender_counts.values, color=['blue', 'pink'], edgecolor='black')
+plt.title('Distribution of Genders')
+plt.xlabel('Gender')
+plt.ylabel('Frequency')
+plt.grid(axis='y', alpha=0.75)
+plt.show()
