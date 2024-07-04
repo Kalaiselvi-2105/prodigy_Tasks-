@@ -1,0 +1,90 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the dataset
+train_df = pd.read_csv('train.csv')
+test_df = pd.read_csv('test.csv')
+
+# Combine train and test datasets for certain operations like imputation
+full_df = pd.concat([train_df, test_df], axis=0, ignore_index=True)
+
+# Overview of the dataset
+print(train_df.head())
+print(train_df.describe())
+print(train_df.info())
+
+# Check for missing values
+print(train_df.isnull().sum())
+
+# Data visualization
+
+# Count plot of survivors
+plt.figure(figsize=(6, 4))
+sns.countplot(x='Survived', data=train_df)
+plt.title('Count of Survivors')
+plt.show()
+
+# Survival rate by sex
+plt.figure(figsize=(6, 4))
+sns.barplot(x='Sex', y='Survived', data=train_df)
+plt.title('Survival Rate by Sex')
+plt.show()
+
+# Survival rate by passenger class
+plt.figure(figsize=(6, 4))
+sns.barplot(x='Pclass', y='Survived', data=train_df)
+plt.title('Survival Rate by Passenger Class')
+plt.show()
+
+# Age distribution
+plt.figure(figsize=(8, 5))
+sns.histplot(train_df['Age'].dropna(), bins=20, kde=True)
+plt.title('Age Distribution')
+plt.show()
+
+# Survival rate by age
+plt.figure(figsize=(10, 6))
+sns.histplot(x='Age', data=train_df, hue='Survived', multiple='stack', bins=20, kde=True)
+plt.title('Survival Rate by Age')
+plt.show()
+
+# Correlation heatmap
+plt.figure(figsize=(8, 6))
+sns.heatmap(train_df.corr(), annot=True, cmap='coolwarm', linewidths=0.5)
+plt.title('Correlation Heatmap')
+plt.show()
+
+# Data cleaning and preprocessing
+
+# Handle missing values
+
+# For 'Age', fill missing values with median age
+train_df['Age'].fillna(train_df['Age'].median(), inplace=True)
+
+# For 'Embarked', fill missing values with the mode
+train_df['Embarked'].fillna(train_df['Embarked'].mode()[0], inplace=True)
+
+# Drop 'Cabin' column due to too many missing values
+train_df.drop('Cabin', axis=1, inplace=True)
+
+# Convert categorical variables to numerical
+train_df['Sex'] = train_df['Sex'].map({'male': 0, 'female': 1})
+train_df['Embarked'] = train_df['Embarked'].map({'S': 0, 'C': 1, 'Q': 2})
+
+# Create dummy variables for 'Embarked'
+embarked_dummies = pd.get_dummies(train_df['Embarked'], prefix='Embarked')
+train_df = pd.concat([train_df, embarked_dummies], axis=1)
+train_df.drop('Embarked', axis=1, inplace=True)
+
+# Feature scaling if necessary
+# For example, using StandardScaler from sklearn
+
+# Check the cleaned dataset
+print(train_df.head())
+
+# Additional feature engineering can be done here if needed
+
+# Final check for any missing values
+print(train_df.isnull().sum())
